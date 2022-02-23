@@ -1,6 +1,6 @@
 locals {
   name        = "slo-generator"
-  client_name = concat(local.name, "-client")
+  client_name = format("%s-client", local.name)
   labels      = {
     "app.kubernetes.io/name"       = local.name
     "app.kubernetes.io/component"  = "client"
