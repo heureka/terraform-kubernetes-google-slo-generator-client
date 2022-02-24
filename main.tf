@@ -5,7 +5,7 @@ locals {
     "app.kubernetes.io/name"       = local.name
     "app.kubernetes.io/component"  = "client"
     "app.kubernetes.io/managed-by" = "terraform-kubernetes-google-slo-generator-client"
-    "app.kubernetes.io/version"    = "1.0.0"
+    "app.kubernetes.io/version"    = "1.0.4"
   }
 }
 
@@ -57,7 +57,7 @@ resource "kubernetes_cron_job_v1" "slo-generator-client" {
               command = ["bash"]
               args    = [
                 "-c",
-                "gcloud alpha storage ls gs://${var.bucket-name} | tr '\\n' ';' | curl -X POST -d @- http://${data.kubernetes_service.slo-generator.metadata[0].name}/?batch=true"
+                "gcloud alpha storage ls gs://${var.bucket-name} | tr '\\n' ';' | curl -X POST -d @- http://${data.kubernetes_service.slo-generator.metadata[0].name}:8080/?batch=true"
               ]
               resources {
                 requests = var.requests
