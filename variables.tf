@@ -13,8 +13,8 @@ variable "requests" {
   description = "requests for the api in kubernetes"
 
   default = {
-    cpu    = "50m"
-    memory = "50Mi"
+    cpu    = "100m"
+    memory = "128Mi"
   }
 }
 
@@ -23,7 +23,7 @@ variable "limits" {
   description = "limits for the api in kubernetes"
 
   default = {
-    cpu    = "50m"
-    memory = "50Mi"
+    cpu    = "100m"
+    memory = "128Mi"
   }
 }

@@ -57,7 +57,7 @@ resource "kubernetes_cron_job_v1" "slo-generator-client" {
               command = ["bash"]
               args    = [
                 "-c",
-                "gcloud alpha storage ls gs://${var.bucket-name} | tr '\n' ';' | curl -X POST -d @- http://${data.kubernetes_service.slo-generator.metadata[0].name}/?batch=true"
+                "gcloud alpha storage ls gs://${var.bucket-name} | tr '\\n' ';' | curl -X POST -d @- http://${data.kubernetes_service.slo-generator.metadata[0].name}/?batch=true"
               ]
               resources {
                 requests = var.requests
