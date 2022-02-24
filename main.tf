@@ -48,22 +48,33 @@ resource "kubernetes_cron_job_v1" "slo-generator-client" {
           }
           spec {
             service_account_name = data.kubernetes_service_account.slo-generator.metadata[0].name
+            node_selector = {
+              "iam.gke.io/gke-metadata-server-enabled": "true"
+            }
             container {
               name    = local.client_name
               image   = "google/cloud-sdk:latest"
               command = ["bash"]
               args    = [
                 "-c",
-                "gsutil ls gs://${var.bucket-name} | tr '\n' ';' | curl -X POST -d @- http://${data.kubernetes_service.slo-generator.metadata[0].name}/?batch=true"
+                "gcloud alpha storage ls gs://${var.bucket-name} | tr '\n' ';' | curl -X POST -d @- http://${data.kubernetes_service.slo-generator.metadata[0].name}/?batch=true"
               ]
               resources {
                 requests = var.requests
                 limits   = var.limits
               }
+              volume_mount {
+                mount_path = "/tmp"
+                name       = "tmp"
+              }
               security_context {
                 allow_privilege_escalation = false
                 read_only_root_filesystem  = true
               }
+            }
+            volume {
+              name = "tmp"
+              empty_dir {}
             }
           }
         }
